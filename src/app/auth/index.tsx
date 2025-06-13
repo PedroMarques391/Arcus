@@ -1,11 +1,14 @@
 import { SignIn } from "@/components/SignIn";
 import { SignUp } from "@/components/SignUp";
+import { useAuth } from "@/hook/useAuth";
 import { useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, Text } from 'react-native-paper';
 
 export default function AuthPage() {
     const [screen, setScreen] = useState<'signIn' | 'signUp'>('signIn')
+
+    const { signIn, signUp } = useAuth()
 
     function handleScreen() {
         setScreen(screen === 'signIn' ? 'signUp' : 'signIn')
@@ -25,14 +28,14 @@ export default function AuthPage() {
                 </View>
                 <Text style={styles.title}>{screen === "signUp" ? 'Venha fazer parte' : 'Bem vindo de volta'}</Text>
                 {screen === "signIn"
-                    ? <SignIn />
-                    : <SignUp />
+                    ? <SignIn singIn={signIn} />
+                    : <SignUp singUp={signUp} />
                 }
                 <Button
                     mode="text"
                     uppercase={false}
                     onPress={handleScreen}>
-                    {screen === "signIn"
+                    {screen === "signUp"
                         ? 'Já tem uma conta? Clique aqui'
                         : 'Não tem uma conta? Crie com um clique'}
                 </Button>
