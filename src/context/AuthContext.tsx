@@ -12,6 +12,7 @@ interface IAuthContextInterface {
     isLoadingUser: boolean
     signUp: (name: string, email: string, password: string) => Promise<string | null>
     signIn: (email: string, password: string) => Promise<string | null>
+    signOut: () => Promise<void>
 }
 
 export const AuthContext = createContext<IAuthContextInterface>({} as IAuthContextInterface)
@@ -21,6 +22,10 @@ export const AuthContext = createContext<IAuthContextInterface>({} as IAuthConte
 export function AuthProvider({ children }: IAuthProviderInterface) {
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null)
     const [isLoadingUser, setIsLoadingUser] = useState<boolean>(true)
+
+    useEffect(() => {
+        getUser();
+    }, [])
 
     async function getUser() {
         try {
@@ -32,11 +37,6 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
             setIsLoadingUser(false)
         }
     }
-
-    useEffect(() => {
-        getUser();
-    }, [])
-
     async function signUp(name: string, email: string, password: string): Promise<string | null> {
 
         try {
@@ -68,11 +68,21 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
         }
     }
 
+    async function signOut() {
+        try {
+            await account.deleteSession('Current')
+            setUser(null)
+        } catch (error) {
+            console.error('[AuthContext-signOut] erro ao sair da conta.', error)
+        }
+    }
+
     return <AuthContext.Provider value={{
         user,
         isLoadingUser,
         signIn,
-        signUp
+        signUp,
+        signOut
     }}>
         {children}
     </AuthContext.Provider>
