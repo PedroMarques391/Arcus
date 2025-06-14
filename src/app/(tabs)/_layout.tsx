@@ -1,12 +1,13 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-
 import { Tabs } from "expo-router";
+import { useTheme } from 'react-native-paper';
 
 export default function TabsLayout() {
+  const theme = useTheme()
   return (
     <Tabs screenOptions={{
-      tabBarActiveTintColor: 'coral',
+      tabBarActiveTintColor: theme.colors.primary,
       headerShown: false
     }}>
       <Tabs.Screen name="index"
