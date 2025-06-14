@@ -25,7 +25,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
     useEffect(() => {
         getUser();
-    }, [])
+    }, [user])
 
     async function getUser() {
         try {
@@ -41,7 +41,6 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
         try {
             await account.create(ID.unique(), email, password, name)
-
             await signIn(email, password)
             return null
         } catch (error) {
@@ -56,8 +55,8 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
     async function signIn(email: string, password: string): Promise<string | null> {
         try {
             await account.createEmailPasswordSession(email, password)
-
-            await signIn(email, password)
+            const session = await account.get()
+            setUser(session)
             return null
         } catch (error) {
             if (error instanceof Error) {
@@ -70,10 +69,10 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
     async function signOut() {
         try {
-            await account.deleteSession('Current')
+            await account.deleteSession('current')
             setUser(null)
         } catch (error) {
-            console.error('[AuthContext-signOut] erro ao sair da conta.', error)
+            console.error('[AuthContext - signOut]: erro ao sair da conta.', error)
         }
     }
 
