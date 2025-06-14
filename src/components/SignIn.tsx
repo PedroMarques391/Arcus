@@ -31,14 +31,10 @@ export function SignIn({ singIn }: TSignInProps): React.JSX.Element {
 
         try {
             const error = await singIn(email, password)
-
-
             if (error) {
                 return setError(error)
             }
-
             router.replace('/')
-
 
         } catch (error) {
             console.error('[handleAuth - SignIn] - Erro ao acessar conta.', error)
