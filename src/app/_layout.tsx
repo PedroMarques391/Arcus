@@ -1,7 +1,9 @@
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/hook/useAuth";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { ReactNode, useEffect } from "react";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -26,7 +28,12 @@ function RouteGuard({ children }: IRootInterface) {
     }
   }, [user, segments])
 
-  return <>{children}</>
+  if (isLoadingUser) {
+    return (
+      <LoadingScreen />
+    );
+  }
+  return <>{children}</>;
 }
 
 export default function RootLayout() {
@@ -41,16 +48,18 @@ export default function RootLayout() {
     },
   };
   return (
-    <AuthProvider>
-      <PaperProvider theme={theme}>
-        <SafeAreaProvider>
-          <RouteGuard >
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-            </Stack>
-          </RouteGuard>
-        </SafeAreaProvider>
-      </PaperProvider>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <PaperProvider theme={theme}>
+          <SafeAreaProvider>
+            <RouteGuard >
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
+              </Stack>
+            </RouteGuard>
+          </SafeAreaProvider>
+        </PaperProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   )
 }
