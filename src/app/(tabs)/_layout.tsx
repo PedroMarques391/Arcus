@@ -10,24 +10,26 @@ export default function TabsLayout() {
 
 
   return (
-    <Tabs screenOptions={{
-      header: () => <Header />,
-      headerStyle: {
-        backgroundColor: '#f5f5f5',
-        borderTopWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-      },
-      tabBarStyle: {
-        backgroundColor: '#f5f5f5',
-        borderTopWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-        marginBottom: Platform.OS === 'ios' ? 0 : 10
-      },
-      tabBarActiveTintColor: theme.colors.primary,
-      tabBarInactiveTintColor: theme.colors.secondary,
-    }}>
+    <Tabs
+      initialRouteName='index'
+      screenOptions={{
+        header: () => <Header />,
+        headerStyle: {
+          backgroundColor: '#f5f5f5',
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarStyle: {
+          backgroundColor: '#f5f5f5',
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+          marginBottom: Platform.OS === 'ios' ? 0 : 10
+        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.secondary,
+      }}>
       <Tabs.Screen
         name='streaks'
         options={{
