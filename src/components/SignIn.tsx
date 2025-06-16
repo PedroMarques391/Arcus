@@ -5,9 +5,10 @@ import { Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignInProps = {
     singIn: (email: string, password: string) => Promise<string | null>
+    loading: boolean
 }
 
-export function SignIn({ singIn }: TSignInProps): React.JSX.Element {
+export function SignIn({ singIn, loading }: TSignInProps): React.JSX.Element {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [error, setError] = useState<string | null>('')
@@ -68,9 +69,10 @@ export function SignIn({ singIn }: TSignInProps): React.JSX.Element {
                 variant="bodyMedium">{error}</Text>}
 
             <Button
+                disabled={loading}
                 onPress={handleAuth}
                 style={styles.button}
-                mode="contained">Entrar</Button>
+                mode="contained">{loading ? 'Carregando ' : 'Entrar'}</Button>
         </>
     )
 }
