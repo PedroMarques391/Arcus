@@ -4,7 +4,10 @@ import {
     Databases
 } from 'react-native-appwrite';
 
-
+interface RealTimeResponse {
+    events: string[],
+    payload: any[]
+}
 
 const client = new Client()
     .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT)
@@ -21,6 +24,7 @@ const HABITS_COLLECTION_ID = process.env.EXPO_PUBLIC_HABITS_COLLECTION_ID
 export {
     account, client,
     database, DATABASE_ID,
-    HABITS_COLLECTION_ID
+    HABITS_COLLECTION_ID,
+    RealTimeResponse
 };
 
