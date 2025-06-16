@@ -19,7 +19,7 @@ export default function Header(): React.JSX.Element {
                     <Text style={styles.avatarText}>{initials}</Text>
                 </View>
                 <View>
-                    <Text style={[styles.greeting, { color: theme.colors.onBackground }]}>Olá,</Text>
+                    <Text style={[styles.greeting, { color: theme.colors.onBackground }]}>Bem Vindo,</Text>
                     <Text style={[styles.username, { color: theme.colors.primary }]}>
                         {user?.name || 'Usuário'}
                     </Text>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     greeting: {
         fontSize: 14,
-        marginBottom: 2,
+        marginBottom: -5,
     },
     username: {
         fontSize: 20,
