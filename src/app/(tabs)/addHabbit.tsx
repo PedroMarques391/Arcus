@@ -40,7 +40,7 @@ export default function AddHabbitPage() {
             setTitle('')
             setDescription('')
 
-            router.back()
+            router.push("/")
         } catch (error: any) {
             if (error instanceof Error) {
                 setError(error.message)
