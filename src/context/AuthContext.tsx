@@ -53,6 +53,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
     }
 
     async function signIn(email: string, password: string): Promise<string | null> {
+        setIsLoadingUser(true)
         try {
             await account.createEmailPasswordSession(email, password)
             const session = await account.get()
@@ -64,6 +65,8 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
             }
 
             return 'Algo de errado aconteceu ao tentar acessar conta.'
+        } finally {
+            setIsLoadingUser(false)
         }
     }
 
