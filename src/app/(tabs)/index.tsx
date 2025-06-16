@@ -1,11 +1,45 @@
-import { database, DATABASE_ID, HABITS_COLLECTION_ID } from "@/database/appwrite";
+import { client, database, DATABASE_ID, HABITS_COLLECTION_ID, RealTimeResponse } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
-import { StyleSheet, Text, View } from "react-native";
+import { IHabits } from "@/types/database.types";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Query } from "react-native-appwrite";
-import { Button } from "react-native-paper";
+import { Surface, Text } from "react-native-paper";
 
 export default function Index() {
-  const { signOut, user } = useAuth()
+  const [habits, setHabits] = useState<IHabits[]>([])
+  const { user } = useAuth()
+
+
+  useEffect(() => {
+    if (user) {
+      const channel = `databases.${DATABASE_ID}.collections.${HABITS_COLLECTION_ID}.documents`
+      const habitsSubscription = client.subscribe(channel, (response: RealTimeResponse) => {
+        if (response.events.includes('databases.*.collections.*.documents.*.create')) {
+          fetchHabits()
+          return
+        }
+        if (response.events.includes('databases.*.collections.*.documents.*.update')) {
+          fetchHabits()
+          return
+        }
+
+        if (response.events.includes('databases.*.collections.*.documents.*.delete')) {
+          fetchHabits()
+          return
+        }
+
+      }
+      )
+      fetchHabits()
+
+      return () => {
+        habitsSubscription()
+      }
+    }
+  }, [user])
 
   async function fetchHabits() {
     try {
@@ -14,6 +48,7 @@ export default function Index() {
         HABITS_COLLECTION_ID,
         [Query.equal('user_id', user?.$id ?? '')]
       )
+      setHabits(response.documents as IHabits[])
     } catch (error) {
       console.log(error)
     }
@@ -21,10 +56,45 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Text>Tela inicial</Text>
-      <Button
-        mode="text"
-        onPress={signOut}>Sair da conta</Button>
+      <View style={styles.header}>
+        <Text variant="headlineSmall" style={styles.title}>
+          O que temos para hoje?
+        </Text>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {habits.length === 0
+          ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>Você ainda não tem hábitos cadastrados</Text>
+              <Link href={'/addHabbit'}>Comece por aqui</Link>
+            </View>
+          )
+          :
+          (
+            habits?.map((habit, key) => (
+              <Surface
+                key={key}
+                style={styles.card} elevation={0}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>{habit.title}</Text>
+                  <Text style={styles.cardDescription}>{habit.description}</Text>
+                  <View style={styles.cardFooter}>
+                    <View style={styles.streakBadge}>
+                      <MaterialCommunityIcons name="fire" size={18} color={'#ff9800'} />
+                      <Text style={styles.streakText}>
+                        {habit.streak_count} day streak
+                      </Text>
+                    </View>
+                    <View style={styles.frequencyBadge}>
+                      <Text style={styles.frequencyText}>{habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1)}</Text>
+                    </View>
+                  </View>
+                </View>
+              </Surface>
+            ))
+          )
+        }
+      </ScrollView>
     </View>
   );
 }
@@ -33,14 +103,79 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 16
   },
-  link: {
-    width: 100,
-    height: 20,
-    backgroundColor: 'coral',
-    borderRadius: 8,
-    textAlign: "center",
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24
   },
+  title: {
+    fontWeight: 'bold'
+  },
+  card: {
+    marginBottom: 18,
+    borderRadius: 18,
+    backgroundColor: '#f7f2fa',
+    shadowColor: ' #000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4
+  },
+  cardContent: {
+    padding: 20,
+
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: '#22223b',
+  },
+  cardDescription: {
+    fontSize: 15,
+    marginBottom: 16,
+    color: '#6c6c80',
+    textTransform: "capitalize",
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  streakBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff3r0',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4
+  },
+  streakText: {
+    marginLeft: 6,
+    color: '#ff9800',
+    fontWeight: 'bold',
+    fontSize: 14
+  },
+  frequencyBadge: {
+    backgroundColor: '#ede7f6',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 4
+  },
+  frequencyText: {
+    color: '#7c4dff',
+    fontWeight: 'bold',
+    fontSize: 14
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  emptyStateText: {
+    color: '#666'
+  }
 });
