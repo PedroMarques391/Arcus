@@ -1,9 +1,24 @@
+import { database, DATABASE_ID, HABITS_COLLECTION_ID } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
 import { StyleSheet, Text, View } from "react-native";
+import { Query } from "react-native-appwrite";
 import { Button } from "react-native-paper";
 
 export default function Index() {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
+
+  async function fetchHabits() {
+    try {
+      const response = await database.listDocuments(
+        DATABASE_ID,
+        HABITS_COLLECTION_ID,
+        [Query.equal('user_id', user?.$id ?? '')]
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text>Tela inicial</Text>
