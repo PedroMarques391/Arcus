@@ -25,7 +25,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
     useEffect(() => {
         getUser();
-    }, [user])
+    }, [])
 
     async function getUser() {
         try {
