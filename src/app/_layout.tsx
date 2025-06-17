@@ -20,13 +20,13 @@ function RouteGuard({ children }: IRootInterface) {
     const inAuthGroup = segments[0] === 'auth'
     if (!user && !inAuthGroup && !isLoadingUser) {
       router.replace('/auth')
-      return
+
     }
     if (user && inAuthGroup && !isLoadingUser) {
       router.replace('/')
-      return
+
     }
-  }, [user, segments])
+  }, [segments, user, isLoadingUser])
 
   if (isLoadingUser) {
     return (
