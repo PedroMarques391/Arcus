@@ -20,12 +20,12 @@ const database = new Databases(client)
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_DB_ID
 const HABITS_COLLECTION_ID = process.env.EXPO_PUBLIC_HABITS_COLLECTION_ID
+const HABITS_COMPLETIONS_ID = process.env.EXPO_PUBLIC_HABITS_COMPLETIONS_ID
 
 
 export {
     account, client,
     database, DATABASE_ID,
-    HABITS_COLLECTION_ID,
-    RealTimeResponse
+    HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID, RealTimeResponse
 };
 
