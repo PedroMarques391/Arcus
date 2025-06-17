@@ -7,7 +7,6 @@ import { Button, Text } from 'react-native-paper';
 
 export default function AuthPage() {
     const [screen, setScreen] = useState<'signIn' | 'signUp'>('signIn')
-
     const { signIn, signUp, isLoadingUser } = useAuth()
 
     function handleScreen() {
