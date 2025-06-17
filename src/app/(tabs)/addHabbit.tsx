@@ -67,6 +67,7 @@ export default function AddHabbitPage() {
                 onChangeText={(text) => setDescription(text)} />
             <View style={styles.frequencyView}>
                 <SegmentedButtons
+                    density="medium"
                     value={frequency}
                     onValueChange={(value) => setFrequency(value as TFrequency)}
                     buttons={FREQUENCY.map((freq) => ({
