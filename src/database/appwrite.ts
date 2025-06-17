@@ -14,6 +14,7 @@ const client = new Client()
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT)
     .setPlatform(process.env.EXPO_PUBLIC_APPWRITE_PLATAFORM)
 
+
 const account = new Account(client);
 const database = new Databases(client)
 
