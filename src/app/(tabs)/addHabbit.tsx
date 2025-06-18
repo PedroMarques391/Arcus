@@ -4,6 +4,7 @@ import {
     HABITS_COLLECTION_ID
 } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
+import { useGlobalStyles } from "@/hook/useGlobalStyle";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -19,6 +20,7 @@ export default function AddHabbitPage() {
     const [frequency, setFrequency] = useState<TFrequency>('daily')
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
+    const globals = useGlobalStyles();
     const theme = useTheme()
     const { user } = useAuth()
 
@@ -52,7 +54,7 @@ export default function AddHabbitPage() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={globals.container}>
             <TextInput
                 value={title}
                 label='Título'
@@ -87,12 +89,6 @@ export default function AddHabbitPage() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#f5f5f5',
-
-    },
     input: {
         marginBottom: 16
     },

@@ -11,7 +11,6 @@ export function useGlobalStyles() {
             backgroundColor: colors.background,
         },
         title: {
-            fontSize: 20,
             fontWeight: 'bold',
             color: colors.primary,
         },
@@ -38,7 +37,7 @@ export function useGlobalStyles() {
         },
         cardDescription: {
             fontSize: 14,
-            color: colors.outline,
+            color: colors.secondary,
         },
         badge: {
             backgroundColor: colors.primaryContainer,

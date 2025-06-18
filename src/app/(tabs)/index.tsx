@@ -1,5 +1,6 @@
 import { client, database, DATABASE_ID, HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID, RealTimeResponse } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
+import { useGlobalStyles } from "@/hook/useGlobalStyle";
 import { IHabitCompletions, IHabits } from "@/types/database.types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
@@ -14,6 +15,7 @@ export default function Index() {
   const [completedHabits, setCompletedHabits] = useState<string[]>([])
   const { user } = useAuth()
   const ref = useRef<{ [key: string]: Swipeable | null }>({})
+  const globals = useGlobalStyles();
 
 
 
@@ -144,7 +146,7 @@ export default function Index() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={globals.container}>
       <View style={styles.header}>
         <Text variant="headlineSmall" style={styles.title}>
           O que temos para hoje?
@@ -182,10 +184,10 @@ export default function Index() {
 
 
                 <Surface
-                  style={[styles.card, isHabitCompleted(habit.$id) && styles.cardCompleted]} elevation={0}>
-                  <View style={styles.cardContent}>
-                    <Text style={[styles.cardTitle, isHabitCompleted(habit.$id) && styles.cardTextCompleted]}>{habit.title}</Text>
-                    <Text style={[styles.cardDescription, isHabitCompleted(habit.$id) && styles.cardTextCompleted]}>{habit.description}</Text>
+                  style={[styles.card, globals.card, isHabitCompleted(habit.$id) && styles.cardCompleted]} elevation={0}>
+                  <View style={[styles.cardContent, globals.cardContent]}>
+                    <Text style={[styles.cardTitle, globals.cardTitle, isHabitCompleted(habit.$id) && styles.cardTextCompleted]}>{habit.title}</Text>
+                    <Text style={[styles.cardDescription, globals.cardDescription, isHabitCompleted(habit.$id) && styles.cardTextCompleted]}>{habit.description}</Text>
                     <View style={styles.cardFooter}>
                       <View style={styles.streakBadge}>
                         <MaterialCommunityIcons name="fire" size={18} color={'#ff9800'} />
@@ -193,8 +195,8 @@ export default function Index() {
                           {habit.streak_count} day streak
                         </Text>
                       </View>
-                      <View style={styles.frequencyBadge}>
-                        <Text style={styles.frequencyText}>{habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1)}</Text>
+                      <View style={[styles.frequencyBadge, globals.badge]}>
+                        <Text style={[styles.frequencyText, globals.badgeText]}>{habit.frequency.charAt(0).toUpperCase() + habit.frequency.slice(1)}</Text>
                       </View>
                     </View>
                   </View>
@@ -209,11 +211,7 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16
-  },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -226,7 +224,6 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 18,
     borderRadius: 18,
-    backgroundColor: '#f7f2fa',
     shadowColor: ' #000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,

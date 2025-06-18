@@ -1,5 +1,6 @@
 import { database, DATABASE_ID, HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
+import { useGlobalStyles } from "@/hook/useGlobalStyle";
 import { IHabitCompletions, IHabits } from "@/types/database.types";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
@@ -16,6 +17,8 @@ export default function StreaksPage() {
     const [habits, setHabits] = useState<IHabits[]>([])
     const [completedHabits, setCompletedHabits] = useState<IHabitCompletions[]>([])
     const { user } = useAuth()
+    const globals = useGlobalStyles();
+
 
     useEffect(() => {
         if (user) {
@@ -108,19 +111,19 @@ export default function StreaksPage() {
 
     const badgeStyles = [styles.badge1, styles.badge2, styles.badge3];
     return (
-        <View style={styles.container}>
+        <View style={globals.container}>
             <Text style={styles.title} variant="headlineSmall">
                 Sequência
             </Text>
             {rankedHabits.length > 0 && (
-                <View style={styles.rankingContainer}>
-                    <Text style={styles.rankingTitle}> 🏅 Melhores Sequências</Text>
+                <View style={[styles.rankingContainer, globals.card]}>
+                    <Text style={[styles.rankingTitle, globals.title]}> 🏅 Melhores Sequências</Text>
                     {rankedHabits.slice(0, 3).map((item, key) => (
                         <View key={key} style={styles.rankingRow}>
                             <View style={[styles.rankingBadge, badgeStyles[key]]}>
                                 <Text style={styles.rankingBadgeText}> {key + 1} </Text>
                             </View>
-                            <Text style={styles.rankingHabit}> {item.habit.title}</Text>
+                            <Text style={[styles.rankingHabit, globals.text]}> {item.habit.title}</Text>
                             <Text style={styles.rankingStreak}> {item.bestStreak}</Text>
                         </View>
                     ))}
@@ -128,7 +131,7 @@ export default function StreaksPage() {
             )}
 
             {habits.length === 0 ? (
-                <View style={[styles.container, { alignItems: "center", }]}>
+                <View style={[globals.container, { alignItems: "center", }]}>
                     <Text>Você ainda não tem hábitos. </Text>
                     <Link
                         style={{ color: "#7c4dff", fontWeight: "bold", marginTop: 8 }}
@@ -140,7 +143,7 @@ export default function StreaksPage() {
             ) : (
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    style={styles.container}
+                    style={globals.container}
                 >
                     {rankedHabits.map(({ habit, streak, bestStreak, total }, key) => (
                         <Card
@@ -180,11 +183,7 @@ export default function StreaksPage() {
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#f5f5f5",
-        padding: 16,
-    },
+
     title: {
         fontWeight: "bold",
         marginBottom: 16,
@@ -192,14 +191,13 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 18,
         borderRadius: 18,
-        backgroundColor: "#fff",
         elevation: 3,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
         borderWidth: 1,
-        borderColor: "#f0f0f0",
+        borderColor: "#fff",
     },
     firstCard: {
         borderWidth: 2,

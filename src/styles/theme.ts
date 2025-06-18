@@ -6,21 +6,23 @@ export const lightTheme = {
     colors: {
         ...MD3LightTheme.colors,
         primary: '#5C6BF5',
-        secondary: '#8C58F5',
         onPrimary: '#ffffff',
         background: '#f5f5f5',
         surface: '#ffffff',
         onSurface: '#1C1C1E',
         secondaryContainer: '#E0E7FF',
+        surfaceVariant: '#fff',
         outline: '#D1D5DB',
         error: '#EF4444',
         onError: '#ffffff',
+        primaryContainer: '#7C3AED',
         shadow: 'rgba(0,0,0,0.08)',
     },
 };
 
 export const darkTheme = {
     ...MD3DarkTheme,
+    myOwnProperty: true,
     colors: {
         ...MD3DarkTheme.colors,
         background: '#121212',
@@ -33,14 +35,11 @@ export const darkTheme = {
         primary: '#7C3AED',
         onPrimary: '#FFFFFF',
 
-        secondary: '#00C896',
         onSecondary: '#000000',
 
         primaryContainer: '#3D2B72',
         secondaryContainer: '#144D43',
-
-        outline: '#3A3A3A',
-
+        outline: '#2A2A2A',
         error: '#CF6679',
         onError: '#000000',
     },

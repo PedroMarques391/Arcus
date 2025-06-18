@@ -15,17 +15,18 @@ export default function TabsLayout() {
       screenOptions={{
         header: () => <Header />,
         headerStyle: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: theme.colors.background,
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
         },
         tabBarStyle: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: theme.colors.background,
+
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          marginBottom: Platform.OS === 'ios' ? 0 : 10
+          paddingBottom: Platform.OS === 'ios' ? 0 : 10
         },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.secondary,
