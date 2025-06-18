@@ -1,50 +1,43 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// context/ThemeContext.tsx
+import { darkTheme, lightTheme } from "@/styles/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { PaperProvider } from "react-native-paper";
 
-interface IThemeProviderProps {
-    children?: ReactNode
+interface ThemeContextType {
+    theme: 'light' | 'dark';
+    onChangeTheme: () => void;
 }
 
-interface IThemeContext {
-    theme?: string
-    onChangeTheme?: () => void
-}
+export const ThemeContext = createContext<ThemeContextType>({
+    theme: 'light',
+    onChangeTheme: () => { },
+});
 
+export function ThemeProvider({ children }: { children: ReactNode }) {
+    const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-const ThemeContext = createContext<IThemeContext>({})
-
-function ThemeProvider({ children }: IThemeProviderProps) {
-    const [theme, setTheme] = useState<'dark' | 'light'>('light')
-
-    const onChangeTheme = async (): Promise<void> => {
-        const newTheme = theme === "light" ? "dark" : "light"
-        setTheme(newTheme)
-        await AsyncStorage.setItem("theme", newTheme)
-    }
+    const onChangeTheme = async () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        await AsyncStorage.setItem("theme", newTheme);
+    };
 
     useEffect(() => {
-        const loadTheme = async () => {
-            const value = await AsyncStorage.getItem('theme')
-            if (!value || (value !== 'light' && value !== 'dark')) {
-                setTheme('light')
-            } else {
-                setTheme(value as 'light' | 'dark')
-            }
-        }
-        loadTheme()
-    }, [])
+        const load = async () => {
+            const saved = await AsyncStorage.getItem("theme");
+            if (saved === "dark") setTheme("dark");
+        };
+        load();
+    }, []);
+
+    const currentTheme = theme === "dark" ? darkTheme : lightTheme;
+
     return (
-        <ThemeContext.Provider value={{
-            onChangeTheme,
-            theme
-        }}>
-            {children}
+        <ThemeContext.Provider value={{ theme, onChangeTheme }}>
+            <PaperProvider theme={currentTheme}>
+                {children}
+            </PaperProvider>
         </ThemeContext.Provider>
-    )
+    );
 }
-
-
-export {
-    ThemeContext,
-    ThemeProvider
-};
