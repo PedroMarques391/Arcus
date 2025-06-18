@@ -2,11 +2,9 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useAuth } from "@/hook/useAuth";
-import { darkTheme, lightTheme } from "@/styles/theme";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { ReactNode, useEffect } from "react";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface IRootInterface {
@@ -39,23 +37,18 @@ function RouteGuard({ children }: IRootInterface) {
 }
 
 export default function RootLayout() {
-  const dark = true
-
-  const theme = dark ? darkTheme : lightTheme
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        <PaperProvider theme={theme}>
-          <ThemeProvider>
-            <SafeAreaProvider>
-              <RouteGuard >
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="(tabs)" />
-                </Stack>
-              </RouteGuard>
-            </SafeAreaProvider>
-          </ThemeProvider>
-        </PaperProvider>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <RouteGuard >
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
+              </Stack>
+            </RouteGuard>
+          </SafeAreaProvider>
+        </ThemeProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   )
