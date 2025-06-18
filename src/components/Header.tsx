@@ -1,47 +1,61 @@
 import { useAuth } from '@/hook/useAuth';
-import { useTheme as onTheme } from '@/hook/useTheme';
+import { useTheme } from '@/hook/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import React from 'react';
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import { Switch, useTheme as usePaperTheme } from 'react-native-paper';
 
 export default function Header(): React.JSX.Element {
     const { user, signOut } = useAuth();
-    const { onChangeTheme } = onTheme();
-    const theme = useTheme()
+    const { onChangeTheme, theme } = useTheme();
+    const paperTheme = usePaperTheme();
+    const isDarkMode = theme === 'dark';
 
     const initials = user?.name ? user.name.charAt(0).toUpperCase() : '?';
     const today = moment().format('dddd, DD MMMM');
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.container, { backgroundColor: paperTheme.colors.background }]}>
             <View style={styles.userInfo}>
-                <View style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
+                <View style={[styles.avatar, { backgroundColor: paperTheme.colors.primary }]}>
                     <Text style={styles.avatarText}>{initials}</Text>
                 </View>
                 <View>
-                    <Text style={[styles.greeting, { color: theme.colors.onBackground }]}>Bem-vindo,</Text>
-                    <Text style={[styles.username, { color: theme.colors.primary }]}>
+                    <Text style={[styles.greeting, { color: paperTheme.colors.onBackground }]}>Bem-vindo,</Text>
+                    <Text style={[styles.username, { color: paperTheme.colors.primary }]}>
                         {user?.name || 'Usuário'}
                     </Text>
-                    <Text style={[styles.date, { color: theme.colors.onBackground }]}>
+                    <Text style={[styles.date, { color: paperTheme.colors.onBackground }]}>
                         {today}
                     </Text>
                 </View>
             </View>
 
             <View style={styles.actions}>
-                <TouchableOpacity onPress={onChangeTheme} style={styles.iconButton}>
-                    <MaterialCommunityIcons
-                        name={theme.dark ? 'white-balance-sunny' : 'weather-night'}
-                        size={26}
-                        color={theme.colors.primary}
-                    />
-                </TouchableOpacity>
-
+                <MaterialCommunityIcons
+                    name={isDarkMode ? 'weather-night' : 'white-balance-sunny'}
+                    size={20}
+                    color={paperTheme.colors.primary}
+                />
+                <Switch
+                    value={isDarkMode}
+                    onValueChange={onChangeTheme}
+                    color={paperTheme.colors.primary}
+                    style={styles.switch}
+                />
                 <TouchableOpacity onPress={signOut} style={styles.iconButton}>
-                    <MaterialCommunityIcons name="logout" size={26} color={theme.colors.error} />
+                    <MaterialCommunityIcons
+                        name="logout"
+                        size={26}
+                        color={paperTheme.colors.error}
+                    />
                 </TouchableOpacity>
             </View>
         </View>
@@ -78,7 +92,6 @@ const styles = StyleSheet.create({
     },
     greeting: {
         fontSize: 14,
-        marginBottom: -5,
     },
     username: {
         fontSize: 20,
@@ -91,9 +104,12 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8, // Se der erro, substitui o 'gap' por marginLeft individual
+        gap: 6,
     },
     iconButton: {
         padding: 6,
+    },
+    switch: {
+        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
     },
 });

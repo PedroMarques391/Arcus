@@ -10,7 +10,7 @@ export const lightTheme = {
         background: '#f5f5f5',
         surface: '#ffffff',
         onSurface: '#1C1C1E',
-        secondaryContainer: '#E0E7FF',
+        secondaryContainer: '#A5B4FC',
         surfaceVariant: '#fff',
         outline: '#D1D5DB',
         error: '#EF4444',
@@ -38,7 +38,7 @@ export const darkTheme = {
         onSecondary: '#000000',
 
         primaryContainer: '#3D2B72',
-        secondaryContainer: '#144D43',
+        secondaryContainer: '#3D2B72',
         outline: '#2A2A2A',
         error: '#CF6679',
         onError: '#000000',
