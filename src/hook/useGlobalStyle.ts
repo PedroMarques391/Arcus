@@ -1,4 +1,3 @@
-// hooks/useGlobalStyles.ts
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
