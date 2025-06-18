@@ -155,9 +155,14 @@ export default function Index() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {habits.length === 0
           ? (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>Você ainda não tem hábitos cadastrados</Text>
-              <Link href={'/addHabbit'}>Comece por aqui</Link>
+            <View style={[globals.container, { alignItems: "center", }]}>
+              <Text>Você ainda não tem hábitos. </Text>
+              <Link
+                style={{ color: "#7c4dff", fontWeight: "bold", marginTop: 8 }}
+                href={'/addHabbit'}
+              >
+                Adicione seu primeiro hábito aqui!
+              </Link>
             </View>
           )
           :
@@ -192,7 +197,7 @@ export default function Index() {
                       <View style={styles.streakBadge}>
                         <MaterialCommunityIcons name="fire" size={18} color={'#ff9800'} />
                         <Text style={styles.streakText}>
-                          {habit.streak_count} day streak
+                          boa! sequência de {habit.streak_count} dias
                         </Text>
                       </View>
                       <View style={[styles.frequencyBadge, globals.badge]}>

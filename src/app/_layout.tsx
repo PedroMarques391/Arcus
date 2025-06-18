@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { useAuth } from "@/hook/useAuth";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { ReactNode, useEffect } from "react";
+import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -42,6 +43,9 @@ export default function RootLayout() {
       <AuthProvider>
         <ThemeProvider>
           <SafeAreaProvider>
+            <StatusBar
+              barStyle={"default"}
+            />
             <RouteGuard >
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" />
