@@ -5,9 +5,10 @@ import {
 } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
 import { useGlobalStyles } from "@/hook/useGlobalStyle";
+import { styles } from "@/styles/addHabits.styles";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { ID } from "react-native-appwrite";
 import { Button, SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
 
@@ -87,15 +88,3 @@ export default function AddHabbitPage() {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    input: {
-        marginBottom: 16
-    },
-    frequencyView: {
-        marginBottom: 24
-    },
-    button: {
-        marginTop: 8
-    }
-})

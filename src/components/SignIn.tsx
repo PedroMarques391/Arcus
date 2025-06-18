@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignInProps = {
@@ -71,14 +70,8 @@ export function SignIn({ singIn, loading }: TSignInProps): React.JSX.Element {
             <Button
                 disabled={loading}
                 onPress={handleAuth}
-                style={styles.button}
+                style={{ marginTop: 20 }}
                 mode="contained">{loading ? 'Carregando ' : 'Entrar'}</Button>
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    button: {
-        marginTop: 20
-    },
-})

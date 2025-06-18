@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignUpProps = {
@@ -81,7 +80,9 @@ export function SignUp({ singUp }: TSignUpProps): React.JSX.Element {
 
             <Button
                 onPress={handleAuth}
-                style={styles.button}
+                style={{
+                    marginTop: 20
+                }}
                 mode="contained">
                 Criar Conta
             </Button>
@@ -89,9 +90,3 @@ export function SignUp({ singUp }: TSignUpProps): React.JSX.Element {
     )
 }
 
-
-const styles = StyleSheet.create({
-    button: {
-        marginTop: 20
-    }
-})
