@@ -1,6 +1,7 @@
 import { SignIn } from "@/components/SignIn";
 import { SignUp } from "@/components/SignUp";
 import { useAuth } from "@/hook/useAuth";
+import { useGlobalStyles } from "@/hook/useGlobalStyle";
 import { useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, Text } from 'react-native-paper';
@@ -8,6 +9,8 @@ import { Button, Text } from 'react-native-paper';
 export default function AuthPage() {
     const [screen, setScreen] = useState<'signIn' | 'signUp'>('signIn')
     const { signIn, signUp, isLoadingUser } = useAuth()
+    const globals = useGlobalStyles();
+
 
     function handleScreen() {
         setScreen(screen === 'signIn' ? 'signUp' : 'signIn')
@@ -16,16 +19,16 @@ export default function AuthPage() {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+            style={[globals.container, , { justifyContent: 'flex-start' }]}
         >
             <View style={styles.content}>
                 <View style={styles.logoView}>
                     <Image
                         source={require('../../../assets/images/app/logo.png')}
                     />
-                    <Text style={styles.appName}>Arcus</Text>
+                    <Text style={[styles.appName, globals.title]}>Arcus</Text>
                 </View>
-                <Text style={styles.title}>{screen === "signUp" ? 'Venha fazer parte' : 'Bem vindo de volta'}</Text>
+                <Text style={[styles.title, globals.text]}>{screen === "signUp" ? 'Venha fazer parte' : 'Bem vindo de volta'}</Text>
                 {screen === "signIn"
                     ? <SignIn singIn={signIn} loading={isLoadingUser} />
                     : <SignUp singUp={signUp} />
@@ -60,12 +63,11 @@ const styles = StyleSheet.create({
     appName: {
         position: "absolute",
         top: 170,
-        left: 84,
+        left: 87,
         letterSpacing: 10,
         fontSize: 20,
         fontFamily: 'serif',
         fontWeight: "700",
-        color: '#5C6BF5'
     },
     content: {
         padding: 20,
@@ -75,7 +77,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "#22223b",
         textAlign: "center",
         marginVertical: 15,
         letterSpacing: 1,
