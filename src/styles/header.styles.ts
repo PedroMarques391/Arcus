@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
     userInfo: {
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
+        marginRight: 16,
+        maxWidth: '70%',
     },
     avatar: {
         width: 48,

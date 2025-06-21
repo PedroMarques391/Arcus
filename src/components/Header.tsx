@@ -3,7 +3,7 @@ import { useTheme } from '@/hook/useTheme';
 import { styles } from '@/styles/header.styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     TouchableOpacity,
@@ -12,6 +12,7 @@ import {
 import { Switch, useTheme as usePaperTheme } from 'react-native-paper';
 
 export default function Header(): React.JSX.Element {
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const { user, signOut } = useAuth();
     const { onChangeTheme, theme } = useTheme();
     const paperTheme = usePaperTheme();
@@ -20,9 +21,14 @@ export default function Header(): React.JSX.Element {
     const initials = user?.name ? user.name.charAt(0).toUpperCase() : '?';
     const today = moment().format('dddd, DD MMMM');
 
+    function toogleModal() {
+        setOpenModal(prev => !prev)
+    }
+
     return (
         <View style={[styles.container, { backgroundColor: paperTheme.colors.background }]}>
-            <View style={styles.userInfo}>
+
+            <TouchableOpacity style={styles.userInfo} onPress={toogleModal}>
                 <View style={[styles.avatar, { backgroundColor: paperTheme.colors.primary }]}>
                     <Text style={styles.avatarText}>{initials}</Text>
                 </View>
@@ -35,7 +41,7 @@ export default function Header(): React.JSX.Element {
                         {today}
                     </Text>
                 </View>
-            </View>
+            </TouchableOpacity>
 
             <View style={styles.actions}>
                 <MaterialCommunityIcons
