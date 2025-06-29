@@ -13,6 +13,7 @@ interface IAuthContextInterface {
     signUp: (name: string, email: string, password: string) => Promise<string | null>
     signIn: (email: string, password: string) => Promise<string | null>
     signOut: () => Promise<void>
+    getUser: () => Promise<void>
 }
 
 export const AuthContext = createContext<IAuthContextInterface>({} as IAuthContextInterface)
@@ -84,7 +85,8 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
         isLoadingUser,
         signIn,
         signUp,
-        signOut
+        signOut,
+        getUser
     }}>
         {children}
     </AuthContext.Provider>
