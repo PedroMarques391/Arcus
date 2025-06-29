@@ -17,9 +17,6 @@ export default function Index() {
   const { user } = useAuth()
   const ref = useRef<{ [key: string]: Swipeable | null }>({})
   const globals = useGlobalStyles();
-
-
-
   useEffect(() => {
     if (user) {
       const habitsChannel = `databases.${DATABASE_ID}.collections.${HABITS_COLLECTION_ID}.documents`
