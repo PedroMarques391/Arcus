@@ -36,16 +36,13 @@ export default function EditProfileModal({
         if (user?.prefs?.photo) {
             setCurrentImageUrl(user.prefs.photo);
         }
-    }, []);
-
-
+    }, [user?.prefs?.photo]);
 
     async function handleImagePicked(pickerResult: ImagePicker.ImagePickerResult) {
         try {
             if (!pickerResult.canceled) {
                 await uploadImageAsync(pickerResult.assets[0]);
                 getUser();
-                setCurrentImageUrl(pickerResult.assets[0].uri);
                 alert('Foto Alterada com sucesso!')
             }
         } catch (error) {
