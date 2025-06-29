@@ -5,11 +5,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import React, { useState } from 'react';
 import {
+    Image,
     Text,
     TouchableOpacity,
     View
 } from 'react-native';
 import { Switch, useTheme as usePaperTheme } from 'react-native-paper';
+import EditProfileModal from './Modal';
 
 export default function Header(): React.JSX.Element {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -21,21 +23,27 @@ export default function Header(): React.JSX.Element {
     const initials = user?.name ? user.name.charAt(0).toUpperCase() : '?';
     const today = moment().format('dddd, DD MMMM');
 
-    function toogleModal() {
-        setOpenModal(prev => !prev)
-    }
-
     return (
         <View style={[styles.container, { backgroundColor: paperTheme.colors.background }]}>
-
-            <TouchableOpacity style={styles.userInfo} onPress={toogleModal}>
+            {openModal && <EditProfileModal showModal={openModal} hideModal={() => setOpenModal(false)} />}
+            <TouchableOpacity style={styles.userInfo} onPress={() => setOpenModal(prev => !prev)}>
                 <View style={[styles.avatar, { backgroundColor: paperTheme.colors.primary }]}>
-                    <Text style={styles.avatarText}>{initials}</Text>
+                    {user?.prefs?.photo ? (
+                        <Image
+                            style={{ width: '100%', height: '100%', overflow: 'hidden', borderRadius: 24 }}
+                            source={{ uri: user.prefs.photo }}
+                            resizeMode="cover"
+                        />
+                    ) : (
+                        <Text style={styles.avatarText}>{initials}</Text>
+                    )}
                 </View>
-                <View>
-                    <Text style={[styles.greeting, { color: paperTheme.colors.onBackground }]}>Bem-vindo,</Text>
+                <View style={{ gap: 4, }}>
                     <Text style={[styles.username, { color: paperTheme.colors.primary }]}>
                         {user?.name || 'Usuário'}
+                    </Text>
+                    <Text style={[{ color: paperTheme.colors.secondary }]}>
+                        {user?.email || 'Email não disponível'}
                     </Text>
                     <Text style={[styles.date, { color: paperTheme.colors.onBackground }]}>
                         {today}
