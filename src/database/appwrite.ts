@@ -1,7 +1,8 @@
 import {
     Account,
     Client,
-    Databases
+    Databases,
+    Storage
 } from 'react-native-appwrite';
 
 interface RealTimeResponse {
@@ -17,15 +18,20 @@ const client = new Client()
 
 const account = new Account(client);
 const database = new Databases(client)
+const storage = new Storage(client)
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_DB_ID
 const HABITS_COLLECTION_ID = process.env.EXPO_PUBLIC_HABITS_COLLECTION_ID
 const HABITS_COMPLETIONS_ID = process.env.EXPO_PUBLIC_HABITS_COMPLETIONS_ID
+const BUCKET_ID = process.env.EXPO_PUBLIC_BUCKET_ID
 
 
 export {
-    account, client,
+    account, BUCKET_ID, client,
     database, DATABASE_ID,
-    HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID, RealTimeResponse
+    HABITS_COLLECTION_ID,
+    HABITS_COMPLETIONS_ID,
+    RealTimeResponse,
+    storage
 };
 
