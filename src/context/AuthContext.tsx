@@ -10,6 +10,7 @@ interface IAuthProviderInterface {
 interface IAuthContextInterface {
     user: Models.User<Models.Preferences> | null;
     isLoadingAuth: boolean
+    isLoadingUser: boolean
     signUp: (name: string, email: string, password: string) => Promise<string | null>
     signIn: (email: string, password: string) => Promise<string | null>
     signOut: () => Promise<void>
@@ -86,6 +87,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
     return <AuthContext.Provider value={{
         user,
         isLoadingAuth,
+        isLoadingUser,
         signIn,
         signUp,
         signOut,
