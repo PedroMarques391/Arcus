@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignInProps = {
     singIn: (email: string, password: string) => Promise<string | null>
@@ -70,8 +70,11 @@ export function SignIn({ singIn, loading }: TSignInProps): React.JSX.Element {
             <Button
                 disabled={loading}
                 onPress={handleAuth}
-                style={{ marginTop: 20 }}
-                mode="contained">{loading ? 'Carregando ' : 'Entrar'}</Button>
+                style={{ marginTop: 20, height: 40 }}
+                contentStyle={{ justifyContent: 'center', height: 40, }}
+                mode="contained">{loading ? <ActivityIndicator size={"small"} color="#fff" />
+                    : 'Entrar'}
+            </Button>
         </>
     )
 }

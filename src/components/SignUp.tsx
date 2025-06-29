@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignUpProps = {
     singUp: (name: string, email: string, password: string) => Promise<string | null>
@@ -82,13 +82,12 @@ export function SignUp({ singUp, loading }: TSignUpProps): React.JSX.Element {
 
             <Button
                 onPress={handleAuth}
-                style={{
-                    marginTop: 20
-                }}
-                disabled={loading}
 
-                mode="contained">
-                {loading ? 'Carregando ' : 'Criar conta'}
+                disabled={loading}
+                style={{ marginTop: 20, height: 40 }}
+                contentStyle={{ justifyContent: 'center', height: 40 }}
+                mode="contained">{loading ? <ActivityIndicator size={"small"} color="#fff" />
+                    : 'Criar conta'}
             </Button>
         </>
     )
