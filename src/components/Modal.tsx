@@ -1,6 +1,7 @@
-import { account, BUCKET_ID, storage } from '@/database/appwrite';
+import { account } from '@/database/appwrite';
 import { useAuth } from '@/hook/useAuth';
 import { useTheme } from '@/hook/useTheme';
+import { uploadImageAsync } from '@/utils/uploadImage';
 import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import * as ImagePicker from 'expo-image-picker';
@@ -13,7 +14,6 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import { ID } from 'react-native-appwrite';
 import { Button, TextInput, useTheme as usePaperTheme } from 'react-native-paper';
 
 interface IModalProps {
@@ -21,12 +21,6 @@ interface IModalProps {
     hideModal: () => void;
 }
 
-type TNativeFile = {
-    name: string,
-    type: string,
-    size: number,
-    uri: string
-}
 
 export default function EditProfileModal({
     showModal,
@@ -41,60 +35,9 @@ export default function EditProfileModal({
     useEffect(() => {
         if (user?.prefs?.photo) {
             setCurrentImageUrl(user.prefs.photo);
-        } else {
-            setCurrentImageUrl(null);
         }
     }, []);
 
-    async function prepareNativeFile(asset: ImagePicker.ImagePickerAsset): Promise<TNativeFile> {
-        console.log('[modal: prepareNativeFile]', asset)
-        try {
-            const url = new URL(asset.uri);
-            return {
-                name: url.pathname.split('/').pop()!,
-                type: asset.mimeType!,
-                size: asset.fileSize!,
-                uri: url.href,
-            }
-        } catch (error) {
-            console.error('[modal: prepareNativeFile] error', error)
-            throw error;
-        }
-    }
-    async function uploadImageAsync(asset: ImagePicker.ImagePickerAsset) {
-        try {
-            const response = await storage.createFile(
-                BUCKET_ID,
-                ID.unique(),
-                await prepareNativeFile(asset)
-            )
-
-            console.log('[modal: file uploaded]', response)
-
-            const imageUrl = storage.getFileView(BUCKET_ID!, response.$id);
-
-            await account.updatePrefs({ photo: imageUrl });
-
-            console.log('[modal: imageUrl]', imageUrl)
-
-            return imageUrl
-
-        } catch (error) {
-            console.error('[Modal - uploadImageAsync]: Erro ao enviar imagem:', error);
-        }
-    }
-
-    async function pickImage() {
-        let pickerResult = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        })
-
-        console.log('[modal: pickerResult]', { pickerResult })
-
-        await handleImagePicked(pickerResult)
-    }
 
 
     async function handleImagePicked(pickerResult: ImagePicker.ImagePickerResult) {
@@ -110,6 +53,18 @@ export default function EditProfileModal({
             alert('Algo deu errado!')
 
         }
+    }
+
+    async function pickImage() {
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        })
+
+        console.log('[modal: pickerResult]', { pickerResult })
+
+        await handleImagePicked(pickerResult)
     }
 
     async function handleUpdateProfile() {
