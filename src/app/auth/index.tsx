@@ -9,7 +9,7 @@ import { Button, Text } from 'react-native-paper';
 
 export default function AuthPage() {
     const [screen, setScreen] = useState<'signIn' | 'signUp'>('signIn')
-    const { signIn, signUp, isLoadingUser } = useAuth()
+    const { signIn, signUp, isLoadingAuth } = useAuth()
     const globals = useGlobalStyles();
 
 
@@ -31,8 +31,8 @@ export default function AuthPage() {
                 </View>
                 <Text style={[styles.title, globals.text]}>{screen === "signUp" ? 'Venha fazer parte' : 'Bem vindo de volta'}</Text>
                 {screen === "signIn"
-                    ? <SignIn singIn={signIn} loading={isLoadingUser} />
-                    : <SignUp singUp={signUp} />
+                    ? <SignIn singIn={signIn} loading={isLoadingAuth} />
+                    : <SignUp singUp={signUp} loading={isLoadingAuth} />
                 }
                 <Button
                     mode="text"

@@ -4,9 +4,11 @@ import { Button, Text, TextInput, useTheme } from "react-native-paper";
 
 type TSignUpProps = {
     singUp: (name: string, email: string, password: string) => Promise<string | null>
+    loading: boolean
+
 }
 
-export function SignUp({ singUp }: TSignUpProps): React.JSX.Element {
+export function SignUp({ singUp, loading }: TSignUpProps): React.JSX.Element {
     const [name, setName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -83,10 +85,11 @@ export function SignUp({ singUp }: TSignUpProps): React.JSX.Element {
                 style={{
                     marginTop: 20
                 }}
+                disabled={loading}
+
                 mode="contained">
-                Criar Conta
+                {loading ? 'Carregando ' : 'Criar conta'}
             </Button>
         </>
     )
 }
-
