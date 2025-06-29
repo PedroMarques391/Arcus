@@ -9,7 +9,7 @@ interface IAuthProviderInterface {
 
 interface IAuthContextInterface {
     user: Models.User<Models.Preferences> | null;
-    isLoadingUser: boolean
+    isLoadingAuth: boolean
     signUp: (name: string, email: string, password: string) => Promise<string | null>
     signIn: (email: string, password: string) => Promise<string | null>
     signOut: () => Promise<void>
@@ -23,6 +23,7 @@ export const AuthContext = createContext<IAuthContextInterface>({} as IAuthConte
 export function AuthProvider({ children }: IAuthProviderInterface) {
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null)
     const [isLoadingUser, setIsLoadingUser] = useState<boolean>(true)
+    const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(false)
 
     useEffect(() => {
         getUser();
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
         }
     }
     async function signUp(name: string, email: string, password: string): Promise<string | null> {
-
+        setIsLoadingAuth(true)
         try {
             await account.create(ID.unique(), email, password, name)
             await signIn(email, password)
@@ -50,11 +51,13 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
             }
 
             return 'Algo de errado aconteceu ao tentar criar conta.'
+        } finally {
+            setIsLoadingAuth(false)
         }
     }
 
     async function signIn(email: string, password: string): Promise<string | null> {
-        setIsLoadingUser(true)
+        setIsLoadingAuth(true)
         try {
             await account.createEmailPasswordSession(email, password)
             const session = await account.get()
@@ -67,7 +70,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
             return 'Algo de errado aconteceu ao tentar acessar conta.'
         } finally {
-            setIsLoadingUser(false)
+            setIsLoadingAuth(false)
         }
     }
 
@@ -82,7 +85,7 @@ export function AuthProvider({ children }: IAuthProviderInterface) {
 
     return <AuthContext.Provider value={{
         user,
-        isLoadingUser,
+        isLoadingAuth,
         signIn,
         signUp,
         signOut,
