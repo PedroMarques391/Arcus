@@ -27,10 +27,10 @@ async function createHabit(user: Models.User<Models.Preferences>, title: string,
 }
 
 
-async function getHabits(user: Models.User<Models.Preferences>): Promise<Models.DocumentList<Models.Document>> {
+async function getHabits(user: Models.User<Models.Preferences>, collectionId: string): Promise<Models.DocumentList<Models.Document>> {
     const response = await database.listDocuments(
         DATABASE_ID,
-        HABITS_COLLECTION_ID,
+        collectionId,
         [Query.equal('user_id', user?.$id ?? '')]
     )
     if (!response.documents) {

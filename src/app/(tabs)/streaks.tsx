@@ -1,12 +1,12 @@
-import { database, DATABASE_ID, HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID } from "@/database/appwrite";
+import { HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
 import { useGlobalStyles } from "@/hook/useGlobalStyle";
+import { getHabits } from "@/hook/useHabits";
 import { styles } from "@/styles/streaks.styles";
 import { IHabitCompletions, IHabits } from "@/types/database.types";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Query } from "react-native-appwrite";
 import { Card, Text } from "react-native-paper";
 interface IStreakData {
     streak: number,
@@ -30,11 +30,7 @@ export default function StreaksPage() {
 
     async function fetchHabits() {
         try {
-            const response = await database.listDocuments(
-                DATABASE_ID,
-                HABITS_COLLECTION_ID,
-                [Query.equal('user_id', user?.$id ?? '')]
-            )
+            const response = await getHabits(user!, HABITS_COLLECTION_ID)
             setHabits(response.documents as IHabits[])
         } catch (error) {
             console.log(error)
@@ -43,13 +39,7 @@ export default function StreaksPage() {
 
     async function fetchCompletions() {
         try {
-            const response = await database.listDocuments(
-                DATABASE_ID,
-                HABITS_COMPLETIONS_ID,
-                [
-                    Query.equal('user_id', user?.$id ?? ''),
-                ]
-            )
+            const response = await getHabits(user!, HABITS_COMPLETIONS_ID)
             const completions = response.documents as IHabitCompletions[]
             setCompletedHabits(completions)
         } catch (error) {

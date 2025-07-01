@@ -60,7 +60,7 @@ export default function Index() {
   async function fetchHabits() {
     try {
 
-      const response = await getHabits(user!)
+      const response = await getHabits(user!, HABITS_COLLECTION_ID)
 
       setHabits(response.documents as IHabits[])
     } catch (error) {
