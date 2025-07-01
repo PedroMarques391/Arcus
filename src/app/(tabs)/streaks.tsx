@@ -4,8 +4,8 @@ import { useGlobalStyles } from "@/hook/useGlobalStyle";
 import { getHabits } from "@/hook/useHabits";
 import { styles } from "@/styles/streaks.styles";
 import { IHabitCompletions, IHabits } from "@/types/database.types";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { Link, useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 interface IStreakData {
@@ -23,10 +23,19 @@ export default function StreaksPage() {
 
     useEffect(() => {
         if (user) {
-            fetchHabits()
-            fetchCompletions()
+            fetchHabits();
+            fetchCompletions();
         }
-    }, [user])
+    }, [user]);
+
+    useFocusEffect(
+        useCallback(() => {
+            if (user) {
+                fetchHabits();
+                fetchCompletions();
+            }
+        }, [user])
+    );
 
     async function fetchHabits() {
         try {
@@ -46,6 +55,7 @@ export default function StreaksPage() {
             console.log(error)
         }
     }
+
 
     const getStreakData = (habitId: string): IStreakData => {
         const habitCompletions = completedHabits
