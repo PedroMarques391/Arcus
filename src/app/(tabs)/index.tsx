@@ -1,13 +1,14 @@
 import { client, database, DATABASE_ID, HABITS_COLLECTION_ID, HABITS_COMPLETIONS_ID, RealTimeResponse } from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
 import { useGlobalStyles } from "@/hook/useGlobalStyle";
+import { getHabits, getTodayCompletions, updateHabit } from "@/hook/useHabits";
 import { styles } from "@/styles/index.styles";
-import { IHabitCompletions, IHabits } from "@/types/database.types";
+import { IHabits } from "@/types/database.types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { ID, Query } from "react-native-appwrite";
+import { ID } from "react-native-appwrite";
 import { Swipeable } from "react-native-gesture-handler";
 import { Surface, Text } from "react-native-paper";
 
@@ -58,11 +59,9 @@ export default function Index() {
 
   async function fetchHabits() {
     try {
-      const response = await database.listDocuments(
-        DATABASE_ID,
-        HABITS_COLLECTION_ID,
-        [Query.equal('user_id', user?.$id ?? '')]
-      )
+
+      const response = await getHabits(user!)
+
       setHabits(response.documents as IHabits[])
     } catch (error) {
       console.log(error)
@@ -71,17 +70,7 @@ export default function Index() {
 
   async function fetchTodayCompletions() {
     try {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const response = await database.listDocuments(
-        DATABASE_ID,
-        HABITS_COMPLETIONS_ID,
-        [
-          Query.equal('user_id', user?.$id ?? ''),
-          Query.greaterThanEqual('completed_at', today.toISOString())
-        ]
-      )
-      const completions = response.documents as IHabitCompletions[]
+      const completions = await getTodayCompletions(user!)
       setCompletedHabits(completions.map((c) => c.habit_id))
     } catch (error) {
       console.log(error)
@@ -120,10 +109,7 @@ export default function Index() {
       const habit = habits.find((habit) => habit.$id === id)
       if (!habit) return
 
-      await database.updateDocument(DATABASE_ID, HABITS_COLLECTION_ID, id, {
-        streak_count: habit.streak_count + 1,
-        last_completed: getCurrentDate
-      })
+      await updateHabit(habit, id, getCurrentDate)
 
     }
     catch (error) {
