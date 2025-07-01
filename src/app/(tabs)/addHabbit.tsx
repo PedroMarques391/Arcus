@@ -1,23 +1,18 @@
-import {
-    database,
-    DATABASE_ID,
-    HABITS_COLLECTION_ID
-} from "@/database/appwrite";
 import { useAuth } from "@/hook/useAuth";
 import { useGlobalStyles } from "@/hook/useGlobalStyle";
+import { createHabit } from "@/hook/useHabits";
 import { styles } from "@/styles/addHabits.styles";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
-import { ID } from "react-native-appwrite";
 import { Button, SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
 
 const FREQUENCY: string[] = ['daily', 'weekly', 'monthly']
 type TFrequency = (typeof FREQUENCY)[number]
 
 export default function AddHabbitPage() {
-    const [title, setTitle] = useState<string>()
-    const [description, setDescription] = useState<string>()
+    const [title, setTitle] = useState<string>('')
+    const [description, setDescription] = useState<string>('')
     const [frequency, setFrequency] = useState<TFrequency>('daily')
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
@@ -29,17 +24,7 @@ export default function AddHabbitPage() {
         if (!user) return
 
         try {
-            await database.createDocument(
-                DATABASE_ID, HABITS_COLLECTION_ID, ID.unique(),
-                {
-                    user_id: user.$id,
-                    title,
-                    description,
-                    streak_count: 0,
-                    last_completed: new Date().toISOString(),
-                    frequency,
-                    created_at: new Date().toISOString(),
-                })
+            await createHabit(user, title, description, frequency,)
             setTitle('')
             setDescription('')
 
